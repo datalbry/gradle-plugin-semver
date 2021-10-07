@@ -34,21 +34,22 @@ class VersionCalculator {
     }
 
     private fun String.hasBreakingChange(): Boolean {
-        return this.contains("BREAKING CHANGE")
+        val matchResult = Regex(REGEX_COMMIT_MESSAGE).matchEntire(this)
+        return matchResult?.groupValues?.getOrNull(3)?.let { it == "!"} ?: false || this.contains("BREAKING CHANGE")
     }
 
     private fun String.hasFeatureChange(): Boolean {
         val matchResult = Regex(REGEX_COMMIT_MESSAGE).matchEntire(this)
-        return matchResult?.groupValues?.getOrNull(2)?.let { it == "feat" } ?: false
+        return matchResult?.groupValues?.getOrNull(1)?.let { it == "feat" } ?: false
     }
 
     private fun String.hasBugFix(): Boolean {
         val matchResult = Regex(REGEX_COMMIT_MESSAGE).matchEntire(this)
-        return matchResult?.groupValues?.getOrNull(2)?.let { it == "fix" } ?: false
+        return matchResult?.groupValues?.getOrNull(1)?.let { it == "fix" } ?: false
     }
 
     companion object {
-        const val REGEX_COMMIT_MESSAGE = """((feat|fix|chore|refactor|style|test|docs)((\(\w{0,15}\))?))(:.\S.*)"""
+        const val REGEX_COMMIT_MESSAGE = """(\w{0,15})(\(\w{0,15}\))?(!?)(:.\S.*)"""
     }
 
 }

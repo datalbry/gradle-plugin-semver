@@ -26,9 +26,4 @@ class VersionWriter {
         val writer = FileWriter(propertiesFile)
         properties.store(writer, "")
     }
-
-    companion object {
-        const val GRADLE_PROPERTIES_FILE_NAME = "gradle.properties"
-    }
-
 }

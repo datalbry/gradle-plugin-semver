@@ -59,4 +59,17 @@ class VersionCalculatorTest {
         assertEquals(nextVersion.patch, 1)
     }
 
+    @Test
+    fun calculateNextVersion_withExclamationMark_raisesMajor() {
+        val commits = listOf(
+            "fix(scope_1)!: ugh, i hate bugs"
+        )
+        val lastVersion = SemanticVersion(0, 1,0)
+        val nextVersion = versionCalculator.calculateNextVersion(commits, lastVersion)
+
+        assertEquals(nextVersion.major, 1)
+        assertEquals(nextVersion.minor, 0)
+        assertEquals(nextVersion.patch, 0)
+    }
+
 }
