@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of the Release'
+        required: true
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+
+      - uses: actions/setup-java@v1
+        name: Setup Java
+        with:
+          java-version: 11
+          
+      - uses: eskatos/gradle-command-action@v1
+        name: Fetch Dependencies
+        with:
+          arguments: dependencies
+          
+      - uses: eskatos/gradle-command-action@v1
+        name: Assemble
+        with:
+          arguments: assemble
+          
+      - uses: eskatos/gradle-command-action@v1
+        name: Tests
+        with:
+          arguments: test
+
+  Release:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' && github.event.inputs.version != '' }}
+    needs: Build
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+
+      - uses: actions/setup-java@v1
+        name: Setup Java
+        with:
+          java-version: 11
+
+      - uses: eskatos/gradle-command-action@v1
+        name: Set Release Version
+        with:
+          arguments: >
+            writeVersion
+            -PprojectVersion=${{ github.event.inputs.version }}
+
+      - uses: eskatos/gradle-command-action@v1
+        name: Set Release Version for Plugin
+        with:
+          arguments: >
+            writeVersionPropertiesToResources
+            -PprojectVersion=${{ github.event.inputs.version }}
+
+      - uses: eskatos/gradle-command-action@v1
+        name: Release Plugin
+        with:
+          arguments: >
+            publishPlugins
+            -Pgradle.publish.key=${{ secrets.GRADLE_PLUGIN_PORTAL_KEY }}
+            -Pgradle.publish.secret=${{ secrets.GRADLE_PLUGIN_PORTAL_SECRET }}
+
+      - uses: EndBug/add-and-commit@v7
+        name: Commit Version
+        with:
+          add: 'gradle.properties'
+          message: '[CI] Release Version ${{ github.event.inputs.version }}'
+          tag: 'v${{ github.event.inputs.version  }}'
+
+
+
+
