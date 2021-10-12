@@ -15,9 +15,9 @@ class GitGraphTest {
     fun getLatestFullVersion_withOneVersion_returnsExactly() = gitTest(
         "fix(context-one): firstCommit" to SemanticVersion(1,0,0),
     ) { git ->
-        val latestVersion = git.getLatestFullVersion()
+        val latestVersion = git.getLatestFullVersion()!!.version
         assertNotNull(latestVersion)
-        assertEquals(latestVersion!!.major, 1)
+        assertEquals(latestVersion.major, 1)
         assertEquals(latestVersion.minor, 0)
         assertEquals(latestVersion.patch, 0)
     }
@@ -46,9 +46,8 @@ class GitGraphTest {
         "fix(context-one): secondCommit" to SemanticVersion(0,1,0),
         "fix(context-one): thirdCommit" to SemanticVersion(0,1,1, "RC.3"),
     ) { git ->
-        val latestVersion = git.getLatestFullVersion()
-        assertNotNull(latestVersion)
-        assertEquals(latestVersion!!.major, 0)
+        val latestVersion = git.getLatestFullVersion()!!.version
+        assertEquals(latestVersion.major, 0)
         assertEquals(latestVersion.minor, 1)
         assertEquals(latestVersion.patch, 0)
     }
@@ -60,9 +59,8 @@ class GitGraphTest {
         "fix(context-one): thirdCommit" to null,
         "fix(context-one): fourthCommit" to null,
     ) { git ->
-        val latestVersion = git.getLatestFullVersion()
-        assertNotNull(latestVersion)
-        assertEquals(latestVersion!!.major, 0)
+        val latestVersion = git.getLatestFullVersion()!!.version
+        assertEquals(latestVersion.major, 0)
         assertEquals(latestVersion.minor, 1)
         assertEquals(latestVersion.patch, 0)
     }
