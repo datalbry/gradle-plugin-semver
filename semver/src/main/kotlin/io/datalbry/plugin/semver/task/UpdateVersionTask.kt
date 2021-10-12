@@ -37,9 +37,14 @@ class UpdateVersionTask : DefaultTask() {
 
         val gitGraph = GitGraph(rootDir)
         val lastVersion = gitGraph.getLatestFullVersion()
-        val commitsSinceLastVersion = lastVersion?.let { gitGraph.getCommits(it.commit) } ?: emptyList()
-        val nextVersion = versionCalculator.calculateNextVersion(commitsSinceLastVersion.map { it.name }, lastVersion?.version)
-        versionWriter.writeVersion(project.rootProject.file("gradle.properties"), nextVersion)
+        val commitsSinceLastVersion = lastVersion
+            ?.let { gitGraph.getCommits(it.commit) }
+            ?.map { it.name }
+            ?: emptyList()
+        val nextVersion = versionCalculator.calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)
+
+        val propertiesFile = extension.propertiesFile
+        versionWriter.writeVersion(propertiesFile, nextVersion)
     }
 
 }
