@@ -35,7 +35,7 @@ class VersionCalculator {
 
     private fun String.hasBreakingChange(): Boolean {
         val matchResult = Regex(REGEX_COMMIT_MESSAGE).matchEntire(this)
-        return matchResult?.groupValues?.getOrNull(3)?.let { it == "!"} ?: false || this.contains("BREAKING CHANGE")
+        return matchResult?.groupValues?.getOrNull(4)?.let { it == "!"} ?: false || this.contains("BREAKING CHANGE")
     }
 
     private fun String.hasFeatureChange(): Boolean {
@@ -49,7 +49,7 @@ class VersionCalculator {
     }
 
     companion object {
-        const val REGEX_COMMIT_MESSAGE = """(\w{0,15})(\(\w{0,15}\))?(!?)(:.\S.*)"""
+        const val REGEX_COMMIT_MESSAGE = """(\w{0,15})(\(?(.{0,40})\))?(!?):(.\S.*)"""
     }
 
 }

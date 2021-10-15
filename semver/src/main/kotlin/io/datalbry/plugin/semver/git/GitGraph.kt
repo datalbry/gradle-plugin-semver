@@ -46,15 +46,22 @@ class GitGraph(gitDirectory: File) {
      *
      * @return [List] of [RevCommit]s
      */
-    fun getCommits(from: RevCommit, until: RevCommit = git.head()): List<RevCommit> {
+    fun getCommits(from: RevCommit, until: RevCommit = getHead()): List<RevCommit> {
         return git.log().addRange(from, until).call().toList()
+    }
+
+    /**
+     * Gets the current head
+     *
+     * @return Head [RevCommit]
+     */
+    fun getHead(): RevCommit {
+        return git.log().setMaxCount(1).call().first()
     }
 
     private fun getTagOrNull(tags: MutableList<Ref>, it: RevCommit) = tags.firstOrNull { a ->
         git.repository.refDatabase.peel(a).peeledObjectId?.name == it.id.name
     }
 }
-
-private fun Git.head() = log().setMaxCount(1).call().first()
 
 private fun Ref.getVersionString() = name.substringAfterLast("/").removePrefix("v")
