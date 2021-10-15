@@ -17,6 +17,7 @@ group = project.rootProject.group
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
+        languageVersion = "1.5"
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
