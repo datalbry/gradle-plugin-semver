@@ -22,6 +22,6 @@ class SemanticVersionPlugin: Plugin<Project> {
 
     companion object {
         const val TASK_NAME = "updateVersion"
-        const val EXTENSION_NAME = "semver"
+        const val EXTENSION_NAME = "semanticVersion"
     }
 }

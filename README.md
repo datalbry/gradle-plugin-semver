@@ -3,6 +3,25 @@
 The `Gradle Semantic Versioning` is a sophisticated gradle plugin, helping developers to update their versions of gradle builds,
 by processing through the git history.
 
+## Getting Started
+
+Setting up the plugin requires the following steps:
+
+1. Add the Plugin to your `build.gradle.kts`
+    ```kotlin
+    plugins {
+      id("io.datalbry.semver") version "<version>"
+    }
+    ```
+2. Configure the Plugin
+    ```kotlin
+    semanticVersion {
+        propertiesFile = "./gradle.properties"
+    }
+    ```
+
+> **NOTE:** The latest versions can be found [here](https://github.com/datalbry/gradle-semver-plugin/tags).
+
 ## License
 >Copyright 2021 DataLbry Technologies UG
 >
