@@ -4,8 +4,8 @@ plugins {
 
 pluginBundle {
     website = "https://datalbry.io"
-    vcsUrl = "https://github.com/datalbry/gradle-version-catalog-updater"
-    tags = listOf("catalog", "version", "ci", "automation")
+    vcsUrl = "https://github.com/datalbry/gradle-semver-plugin"
+    tags = listOf("semantic", "version", "semver", "ci", "release", "release-management", "versioning")
     mavenCoordinates {
         val group = project.group.toString()
         this.groupId = group

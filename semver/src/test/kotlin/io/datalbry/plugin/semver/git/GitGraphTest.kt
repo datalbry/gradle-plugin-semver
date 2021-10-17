@@ -64,4 +64,17 @@ class GitGraphTest {
         assertEquals(latestVersion.minor, 1)
         assertEquals(latestVersion.patch, 0)
     }
+
+    @Test
+    fun getLatestFullVersion_withNonConventionalCommits_logsAllInvalidLogs() = gitTest(
+        "firstCommit" to SemanticVersion(0,1,0, "RC.1"),
+        "secondCommit" to SemanticVersion(0,1,0),
+        "thirdCommit" to null,
+        "fourthCommit" to null,
+    ) { git ->
+        val latestVersion = git.getLatestFullVersion()!!.version
+        assertEquals(latestVersion.major, 0)
+        assertEquals(latestVersion.minor, 1)
+        assertEquals(latestVersion.patch, 0)
+    }
 }

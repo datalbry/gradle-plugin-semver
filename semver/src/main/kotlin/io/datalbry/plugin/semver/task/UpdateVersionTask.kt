@@ -1,6 +1,7 @@
 package io.datalbry.plugin.semver.task
 
 import io.datalbry.plugin.semver.SemanticVersionExtension
+import io.datalbry.plugin.semver.SemanticVersionPlugin.Companion.TASK_GROUP_NAME
 import io.datalbry.plugin.semver.git.GitGraph
 import io.datalbry.plugin.semver.version.VersionCalculator
 import io.datalbry.plugin.semver.version.VersionWriter
@@ -29,6 +30,10 @@ class UpdateVersionTask : DefaultTask() {
 
     private val versionCalculator = VersionCalculator()
     private val versionWriter = VersionWriter()
+
+    init {
+        group = TASK_GROUP_NAME
+    }
 
     @TaskAction
     fun publish() {

@@ -6,7 +6,7 @@ by processing through the git history.
 ## Getting Started
 
 Setting up the plugin requires the following steps:
-
+ 
 1. Add the Plugin to your `build.gradle.kts`
     ```kotlin
     plugins {

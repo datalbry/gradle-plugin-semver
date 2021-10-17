@@ -1,5 +1,6 @@
 package io.datalbry.plugin.semver
 
+import io.datalbry.plugin.semver.task.TagVersionTask
 import io.datalbry.plugin.semver.task.UpdateVersionTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,11 +18,14 @@ class SemanticVersionPlugin: Plugin<Project> {
 
     override fun apply(project: Project) {
         project.extensions.create(EXTENSION_NAME, SemanticVersionExtension::class.java)
-        project.tasks.register(TASK_NAME, UpdateVersionTask::class.java)
+        project.tasks.register(UPDATE_TASK_NAME, UpdateVersionTask::class.java)
+        project.tasks.register(TAG_TASK_NAME, TagVersionTask::class.java)
     }
 
     companion object {
-        const val TASK_NAME = "updateVersion"
+        const val UPDATE_TASK_NAME = "updateVersion"
+        const val TAG_TASK_NAME = "tag"
+        const val TASK_GROUP_NAME = "semantic version"
         const val EXTENSION_NAME = "semanticVersion"
     }
 }

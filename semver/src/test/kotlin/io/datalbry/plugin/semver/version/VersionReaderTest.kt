@@ -44,5 +44,4 @@ class VersionReaderTest {
         assertEquals(semanticVersion.patch, 3)
         assertEquals(semanticVersion.preRelease, "SNAPSHOT")
     }
-
 }

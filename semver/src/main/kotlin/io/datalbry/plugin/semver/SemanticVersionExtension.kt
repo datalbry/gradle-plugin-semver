@@ -13,5 +13,9 @@ abstract class SemanticVersionExtension @Inject constructor(project: Project) {
             project.rootProject.file("gradle.properties").absolutePath
         )
     )
+    var version: String = project.propertyOrDefault(
+        "semver.version",
+        project.version.toString()
+    )
 
 }

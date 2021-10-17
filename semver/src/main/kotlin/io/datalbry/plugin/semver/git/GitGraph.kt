@@ -7,6 +7,7 @@ import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Ref
 import org.eclipse.jgit.revwalk.RevCommit
+import org.jetbrains.kotlin.util.prefixIfNot
 
 
 /**
@@ -51,11 +52,15 @@ class GitGraph(gitDirectory: File) {
     }
 
     /**
-     * Gets the current head
+     * Creates a Tag on the current Head
      *
-     * @return Head [RevCommit]
+     * @param version to tag
      */
-    fun getHead(): RevCommit {
+    fun tagVersion(version: String) {
+        git.tag().setName(version.prefixIfNot("v")).call()
+    }
+
+    private fun getHead(): RevCommit {
         return git.log().setMaxCount(1).call().first()
     }
 
