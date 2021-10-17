@@ -47,6 +47,18 @@ class GitGraph(gitDirectory: File) {
      *
      * @return [List] of [RevCommit]s
      */
+    fun getCommits(): List<RevCommit> {
+        return git.log().call().toList()
+    }
+
+    /**
+     * Gets a list of commits
+     *
+     * @param from first commit, not to include in the list
+     * @param until last commit which should be included
+     *
+     * @return [List] of [RevCommit]s
+     */
     fun getCommits(from: RevCommit, until: RevCommit = getHead()): List<RevCommit> {
         return git.log().addRange(from, until).call().toList()
     }
@@ -56,8 +68,8 @@ class GitGraph(gitDirectory: File) {
      *
      * @param version to tag
      */
-    fun tagVersion(version: String) {
-        git.tag().setName(version.prefixIfNot("v")).call()
+    fun tagVersion(version: String, message: String = "") {
+        git.tag().setName(version.prefixIfNot("v")).setMessage(message).call()
     }
 
     private fun getHead(): RevCommit {

@@ -3,6 +3,8 @@ package io.datalbry.plugin.semver.task
 import io.datalbry.plugin.semver.SemanticVersionExtension
 import io.datalbry.plugin.semver.SemanticVersionPlugin
 import io.datalbry.plugin.semver.git.GitGraph
+import io.datalbry.plugin.semver.notes.ReleaseNotesExtractor
+import io.datalbry.plugin.semver.notes.formatter.MarkdownReleaseNotesFormatter
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
@@ -14,6 +16,8 @@ import org.gradle.api.tasks.TaskAction
  */
 open class TagVersionTask: DefaultTask() {
 
+    private val releaseNotesExtractor = ReleaseNotesExtractor()
+
     init {
         group = SemanticVersionPlugin.TASK_GROUP_NAME
     }
@@ -22,9 +26,13 @@ open class TagVersionTask: DefaultTask() {
     fun publish() {
         val extension = project.extensions.getByType(SemanticVersionExtension::class.java)
         val rootDir = project.rootDir.absoluteFile
-
         val gitGraph = GitGraph(rootDir)
-        gitGraph.tagVersion(extension.version)
+
+        val lastVersion = gitGraph.getLatestFullVersion()
+        val commits = lastVersion?.let { gitGraph.getCommits(from = it.commit) } ?: gitGraph.getCommits()
+        val releaseNotes = releaseNotesExtractor.extractReleaseNotes(commits.map { it.fullMessage })
+        val releaseNotesString = MarkdownReleaseNotesFormatter.format(releaseNotes)
+        gitGraph.tagVersion(extension.version, releaseNotesString)
     }
 
 }

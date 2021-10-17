@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.util.removeSuffixIfPresent
-import org.jetbrains.kotlin.util.suffixIfNot
 import java.util.*
 
 val version: String by project
