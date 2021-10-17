@@ -72,6 +72,7 @@ jobs:
         with:
           arguments: >
             publishPlugins
+            -version=${{ github.event.inputs.version }}
             -Pgradle.publish.key=${{ secrets.GRADLE_PLUGIN_PORTAL_KEY }}
             -Pgradle.publish.secret=${{ secrets.GRADLE_PLUGIN_PORTAL_SECRET }}
 
