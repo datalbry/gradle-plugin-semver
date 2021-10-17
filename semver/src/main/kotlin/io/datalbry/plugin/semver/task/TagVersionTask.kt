@@ -12,7 +12,7 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author timo gruen - 2021-10-17
  */
-class TagVersionTask: DefaultTask() {
+open class TagVersionTask: DefaultTask() {
 
     init {
         group = SemanticVersionPlugin.TASK_GROUP_NAME

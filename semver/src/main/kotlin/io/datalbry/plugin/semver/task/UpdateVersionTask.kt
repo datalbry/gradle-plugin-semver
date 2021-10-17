@@ -26,7 +26,7 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author timo gruen - 2021-10-10
  */
-class UpdateVersionTask : DefaultTask() {
+open class UpdateVersionTask : DefaultTask() {
 
     private val versionCalculator = VersionCalculator()
     private val versionWriter = VersionWriter()
