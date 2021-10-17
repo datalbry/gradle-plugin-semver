@@ -61,13 +61,6 @@ jobs:
             -Pversion=${{ github.event.inputs.version }}
 
       - uses: eskatos/gradle-command-action@v1
-        name: Set Release Version for Plugin
-        with:
-          arguments: >
-            writeVersionPropertiesToResources
-            -Pversion=${{ github.event.inputs.version }}
-
-      - uses: eskatos/gradle-command-action@v1
         name: Release Plugin
         with:
           arguments: >
