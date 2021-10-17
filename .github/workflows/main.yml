@@ -58,21 +58,21 @@ jobs:
         with:
           arguments: >
             writeVersion
-            -version=${{ github.event.inputs.version }}
+            -Pversion=${{ github.event.inputs.version }}
 
       - uses: eskatos/gradle-command-action@v1
         name: Set Release Version for Plugin
         with:
           arguments: >
             writeVersionPropertiesToResources
-            -version=${{ github.event.inputs.version }}
+            -Pversion=${{ github.event.inputs.version }}
 
       - uses: eskatos/gradle-command-action@v1
         name: Release Plugin
         with:
           arguments: >
             publishPlugins
-            -version=${{ github.event.inputs.version }}
+            -Pversion=${{ github.event.inputs.version }}
             -Pgradle.publish.key=${{ secrets.GRADLE_PLUGIN_PORTAL_KEY }}
             -Pgradle.publish.secret=${{ secrets.GRADLE_PLUGIN_PORTAL_SECRET }}
 
