@@ -36,7 +36,7 @@ open class TagVersionTask: DefaultTask() {
         val commits = lastVersion?.let { gitGraph.getCommits(from = it.commit) } ?: gitGraph.getCommits()
         logCommits(commits)
 
-        val releaseNotes = releaseNotesExtractor.extractReleaseNotes(commits.map { it.fullMessage })
+        val releaseNotes = releaseNotesExtractor.extractReleaseNotes(commits.map { it.shortMessage })
         val releaseNotesString = MarkdownReleaseNotesFormatter.format(releaseNotes)
         gitGraph.tagVersion(extension.version, releaseNotesString)
     }
