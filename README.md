@@ -10,7 +10,7 @@ Setting up the plugin requires the following steps:
 1. Add the Plugin to your `build.gradle.kts`
     ```kotlin
     plugins {
-      id("io.datalbry.semver") version "<version>"
+      id("io.datalbry.plugin.semver") version "<version>"
     }
     ```
 2. Configure the Plugin
