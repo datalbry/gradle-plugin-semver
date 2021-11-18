@@ -3,8 +3,10 @@ package io.datalbry.plugin.semver.task
 import io.datalbry.plugin.semver.SemanticVersionExtension
 import io.datalbry.plugin.semver.SemanticVersionPlugin.Companion.TASK_GROUP_NAME
 import io.datalbry.plugin.semver.git.GitGraph
+import io.datalbry.plugin.semver.git.SemanticGitTag
 import io.datalbry.plugin.semver.version.VersionCalculator
 import io.datalbry.plugin.semver.version.VersionWriter
+import io.datalbry.plugin.semver.version.model.SemanticVersion
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
@@ -42,14 +44,39 @@ open class UpdateVersionTask : DefaultTask() {
 
         val gitGraph = GitGraph(rootDir)
         val lastVersion = gitGraph.getLatestFullVersion()
+        logLastVersion(lastVersion)
+
         val commitsSinceLastVersion = lastVersion
             ?.let { gitGraph.getCommits(it.commit) }
-            ?.map { it.name }
+            ?.map { it.shortMessage }
             ?: emptyList()
+        logCommits(commitsSinceLastVersion)
+
         val nextVersion = versionCalculator.calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)
+        logVersion(nextVersion)
 
         val propertiesFile = extension.propertiesFile
         versionWriter.writeVersion(propertiesFile, nextVersion)
     }
 
+    private fun logVersion(nextVersion: SemanticVersion) {
+        project.logger.info("Next version is $nextVersion")
+    }
+
+    private fun logCommits(commitsSinceLastVersion: List<String>) {
+        if (commitsSinceLastVersion.isEmpty()) {
+            project.logger.info("No commits have been found")
+        } else {
+            project.logger.info("Found ${commitsSinceLastVersion.size} commits since last release")
+            commitsSinceLastVersion.onEach {
+                project.logger.trace(it)
+            }
+        }
+    }
+
+    private fun logLastVersion(lastVersion: SemanticGitTag?) {
+        if (lastVersion == null) {
+            project.logger.info("Last version not found")
+        } else project.logger.info("Last version found is: ${lastVersion.version}")
+    }
 }
