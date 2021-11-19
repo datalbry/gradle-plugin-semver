@@ -24,6 +24,7 @@ class ReleaseNotesExtractor {
         val type = matchResult?.groupValues?.getOrNull(1) ?: ""
         val context = matchResult?.groupValues?.getOrNull(3) ?: ""
         val body = matchResult?.groupValues?.getOrNull(5) ?: ""
+
         return ReleaseNote(type = type, context = context, message = body)
     }
 

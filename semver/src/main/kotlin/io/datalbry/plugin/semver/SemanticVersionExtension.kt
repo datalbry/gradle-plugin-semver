@@ -1,6 +1,7 @@
 package io.datalbry.plugin.semver
 
 import io.datalbry.plugin.semver.extensions.propertyOrDefault
+import io.datalbry.plugin.semver.extensions.propertyOrNull
 import java.io.File
 import javax.inject.Inject
 import org.gradle.api.Project
@@ -18,4 +19,7 @@ abstract class SemanticVersionExtension @Inject constructor(project: Project) {
         project.version.toString()
     )
 
+    var preRelease: String? = project.propertyOrNull(
+        "semver.preRelease",
+    )
 }

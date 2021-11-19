@@ -42,9 +42,6 @@ class GitGraph(gitDirectory: File) {
     /**
      * Gets a list of commits
      *
-     * @param from first commit, not to include in the list
-     * @param until last commit which should be included
-     *
      * @return [List] of [RevCommit]s
      */
     fun getCommits(): List<RevCommit> {
@@ -72,7 +69,7 @@ class GitGraph(gitDirectory: File) {
         git.tag().setName(version.prefixIfNot("v")).setMessage(message).call()
     }
 
-    private fun getHead(): RevCommit {
+    fun getHead(): RevCommit {
         return git.log().setMaxCount(1).call().first()
     }
 

@@ -21,7 +21,7 @@ class VersionWriter {
     fun writeVersion(propertiesFile: File, semanticVersion: SemanticVersion) {
         val properties = Properties()
         properties.load(propertiesFile.inputStream())
-        properties["version"] = "${semanticVersion.major}.${semanticVersion.minor}.${semanticVersion.patch}"
+        properties["version"] = semanticVersion.toString()
 
         val writer = FileWriter(propertiesFile)
         properties.store(writer, "")
