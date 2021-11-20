@@ -11,12 +11,12 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 /**
- * [TagVersionTask] tags the current head with the version passed either into the extension,
+ * [VersionTagTask] tags the current head with the version passed either into the extension,
  * or if not set, falling back to the standard gradle version property
  *
  * @author timo gruen - 2021-10-17
  */
-open class TagVersionTask: DefaultTask() {
+open class VersionTagTask: DefaultTask() {
 
     private val releaseNotesExtractor = ReleaseNotesExtractor()
 

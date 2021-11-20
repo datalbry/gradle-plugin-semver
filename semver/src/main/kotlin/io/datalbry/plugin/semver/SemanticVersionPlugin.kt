@@ -1,7 +1,7 @@
 package io.datalbry.plugin.semver
 
-import io.datalbry.plugin.semver.task.TagVersionTask
-import io.datalbry.plugin.semver.task.UpdateVersionTask
+import io.datalbry.plugin.semver.task.VersionTagTask
+import io.datalbry.plugin.semver.task.VersionUpdateTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -9,7 +9,7 @@ import org.gradle.api.Project
  * The [SemanticVersionPlugin] provides a convenient way to derive Semantic Versions by
  * the git history.
  *
- * @see io.datalbry.plugin.semver.task.UpdateVersionTask for information about the actual version update process
+ * @see io.datalbry.plugin.semver.task.VersionUpdateTask for information about the actual version update process
  *
  * @author timo gruen - 2021-10-12
  */
@@ -18,8 +18,8 @@ class SemanticVersionPlugin: Plugin<Project> {
 
     override fun apply(project: Project) {
         project.extensions.create(EXTENSION_NAME, SemanticVersionExtension::class.java)
-        project.tasks.register(UPDATE_TASK_NAME, UpdateVersionTask::class.java)
-        project.tasks.register(TAG_TASK_NAME, TagVersionTask::class.java)
+        project.tasks.register(UPDATE_TASK_NAME, VersionUpdateTask::class.java)
+        project.tasks.register(TAG_TASK_NAME, VersionTagTask::class.java)
     }
 
     companion object {

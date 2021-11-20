@@ -19,7 +19,13 @@ abstract class SemanticVersionExtension @Inject constructor(project: Project) {
         project.version.toString()
     )
 
-    var preRelease: String? = project.propertyOrNull(
-        "semver.preRelease",
+    var isPreRelease: Boolean = project.propertyOrDefault(
+        "semver.isPreRelease",
+        false
+    )
+
+    var preReleaseTemplate: String = project.propertyOrDefault(
+        "semver.preReleaseFormat",
+        "-dev.{COMMIT_TIMESTAMP}"
     )
 }
