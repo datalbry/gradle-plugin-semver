@@ -4,6 +4,7 @@ import io.datalbry.plugin.semver.SemanticVersionExtension
 import io.datalbry.plugin.semver.SemanticVersionPlugin.Companion.TASK_GROUP_NAME
 import io.datalbry.plugin.semver.git.GitGraph
 import io.datalbry.plugin.semver.git.SemanticGitTag
+import io.datalbry.plugin.semver.version.PreReleaseSuffixResolver
 import io.datalbry.plugin.semver.version.VersionCalculator
 import io.datalbry.plugin.semver.version.VersionWriter
 import io.datalbry.plugin.semver.version.model.SemanticVersion
@@ -11,7 +12,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 /**
- * [UpdateVersionTask] updates the version in the `gradle.properties` file
+ * [VersionUpdateTask] updates the version in the `gradle.properties` file
  * by calculating the next version using the Git commit messages.
  *
  * The task is relying on conventional commits to derive the next version by commit messages.
@@ -28,9 +29,10 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author timo gruen - 2021-10-10
  */
-open class UpdateVersionTask : DefaultTask() {
+open class VersionUpdateTask : DefaultTask() {
 
     private val versionCalculator = VersionCalculator()
+    private val preReleaseSuffixResolver = PreReleaseSuffixResolver()
     private val versionWriter = VersionWriter()
 
     init {
@@ -52,7 +54,14 @@ open class UpdateVersionTask : DefaultTask() {
             ?: emptyList()
         logCommits(commitsSinceLastVersion)
 
-        val nextVersion = versionCalculator.calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)
+        val preRelease = if (extension.isPreRelease) {
+            val lastCommit = gitGraph.getHead()
+            preReleaseSuffixResolver.resolve(extension.preReleaseTemplate, lastCommit)
+        } else null
+        val nextVersion = versionCalculator
+            .calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)
+            .copy(preRelease = preRelease)
+
         logVersion(nextVersion)
 
         val propertiesFile = extension.propertiesFile
