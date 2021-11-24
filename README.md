@@ -16,9 +16,9 @@ Setting up the plugin requires the following steps:
 2. Configure the Plugin
     ```kotlin
     semanticVersion {
-        propertiesFile = "./gradle.properties"
+        propertiesFile = File("./gradle.properties")
         isPreRelease = true
-        preReleaseFormat = "-beta.{ISO_DATE_TIME}" 
+        preReleaseTemplate = "beta.{ISO_DATE_TIME}" 
     }
     ```
 
@@ -32,7 +32,7 @@ The Plugin is highly configurable. The following parameters can be set using eit
 |---------|-----------|-----|-------|
 |`semanticVersion.propertiesFile`|The location of the properties file to write the version property to|`String`|`./gradle.properties`|
 |`semanticVersion.isPreRelease`|Toggles if the next version should be interpreted as a pre release|`Boolean`|`false`
-|`semanticVersion.preReleaseFormat`|The format of the pre release suffix. `{ISO_DATE_TIME}` and `{COMMIT_TIMESTAMP}` are currently supported placeholder for values inside the format. The placeholder getting substituted with their corresponding actual values while evaluating the version.|`String`|`-dev.{COMMIT_TIMESTAMP}`
+|`semanticVersion.preReleaseTemplate`|The format of the pre release suffix. `{BUILD_TIMESTAMP}` and `{COMMIT_TIMESTAMP}` are currently supported placeholder for values inside the format. The placeholder getting substituted with their corresponding actual values while evaluating the version.|`String`|`dev.{COMMIT_TIMESTAMP}`
 
 ## License
 >Copyright 2021 DataLbry Technologies UG
@@ -48,4 +48,3 @@ The Plugin is highly configurable. The following parameters can be set using eit
 >WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 >See the License for the specific language governing permissions and
 >limitations under the License.
-

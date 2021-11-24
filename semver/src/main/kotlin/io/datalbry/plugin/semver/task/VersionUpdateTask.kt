@@ -4,7 +4,7 @@ import io.datalbry.plugin.semver.SemanticVersionExtension
 import io.datalbry.plugin.semver.SemanticVersionPlugin.Companion.TASK_GROUP_NAME
 import io.datalbry.plugin.semver.git.GitGraph
 import io.datalbry.plugin.semver.git.SemanticGitTag
-import io.datalbry.plugin.semver.version.PreReleaseSuffixResolver
+import io.datalbry.plugin.semver.version.PreReleaseTemplateResolver
 import io.datalbry.plugin.semver.version.VersionCalculator
 import io.datalbry.plugin.semver.version.VersionWriter
 import io.datalbry.plugin.semver.version.model.SemanticVersion
@@ -32,7 +32,7 @@ import org.gradle.api.tasks.TaskAction
 open class VersionUpdateTask : DefaultTask() {
 
     private val versionCalculator = VersionCalculator()
-    private val preReleaseSuffixResolver = PreReleaseSuffixResolver()
+    private val preReleaseTemplateResolver = PreReleaseTemplateResolver()
     private val versionWriter = VersionWriter()
 
     init {
@@ -56,7 +56,7 @@ open class VersionUpdateTask : DefaultTask() {
 
         val preRelease = if (extension.isPreRelease) {
             val lastCommit = gitGraph.getHead()
-            preReleaseSuffixResolver.resolve(extension.preReleaseTemplate, lastCommit)
+            preReleaseTemplateResolver.resolve(extension.preReleaseTemplate, lastCommit)
         } else null
         val nextVersion = versionCalculator
             .calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)
