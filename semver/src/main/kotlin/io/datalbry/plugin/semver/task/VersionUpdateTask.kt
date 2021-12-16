@@ -9,6 +9,7 @@ import io.datalbry.plugin.semver.version.VersionCalculator
 import io.datalbry.plugin.semver.version.VersionWriter
 import io.datalbry.plugin.semver.version.model.SemanticVersion
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -30,6 +31,9 @@ import org.gradle.api.tasks.TaskAction
  * @author timo gruen - 2021-10-10
  */
 open class VersionUpdateTask : DefaultTask() {
+
+    @Input var isPreRelease: Boolean = true
+    @Input lateinit var template: String
 
     private val versionCalculator = VersionCalculator()
     private val preReleaseTemplateResolver = PreReleaseTemplateResolver()
@@ -54,9 +58,9 @@ open class VersionUpdateTask : DefaultTask() {
             ?: emptyList()
         logCommits(commitsSinceLastVersion)
 
-        val preRelease = if (extension.isPreRelease) {
+        val preRelease = if (isPreRelease) {
             val lastCommit = gitGraph.getHead()
-            preReleaseTemplateResolver.resolve(extension.preReleaseTemplate, lastCommit)
+            preReleaseTemplateResolver.resolve(template, lastCommit)
         } else null
         val nextVersion = versionCalculator
             .calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)

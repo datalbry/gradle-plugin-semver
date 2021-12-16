@@ -1,6 +1,8 @@
 package io.datalbry.plugin.semver
 
+import io.datalbry.plugin.semver.extensions.getPreReleaseTemplates
 import io.datalbry.plugin.semver.extensions.propertyOrDefault
+import io.datalbry.plugin.semver.task.ReleaseTemplate
 import org.gradle.api.Project
 import java.io.File
 import javax.inject.Inject
@@ -18,13 +20,7 @@ abstract class SemanticVersionExtension @Inject constructor(project: Project) {
         project.version.toString()
     )
 
-    var isPreRelease: Boolean = project.propertyOrDefault(
-        "semver.isPreRelease",
-        false
-    )
-
-    var preReleaseTemplate: String = project.propertyOrDefault(
-        "semver.preReleaseTemplate",
-        "dev.{COMMIT_TIMESTAMP}"
+    var preReleaseTemplates: List<ReleaseTemplate> = project.getPreReleaseTemplates(
+        "semver.preReleases"
     )
 }

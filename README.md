@@ -17,8 +17,10 @@ Setting up the plugin requires the following steps:
     ```kotlin
     semanticVersion {
         propertiesFile = File("./gradle.properties")
-        isPreRelease = true
-        preReleaseTemplate = "beta.{ISO_DATE_TIME}" 
+        schema {
+          alpha = "alpha.{ISO_DATE_TIME}"
+          beta = "beta.{ISO_DATE_TIME}"
+        } 
     }
     ```
 

@@ -28,7 +28,7 @@ class SemanticVersionPlugin: Plugin<Project> {
         const val UPDATE_TASK_NAME = "updateVersion"
         const val TAG_TASK_NAME = "tag"
         const val PRINT_VERSION_TASK_NAME = "printVersion"
-        const val TASK_GROUP_NAME = "semantic version"
-        const val EXTENSION_NAME = "semanticVersion"
+        const val TASK_GROUP_NAME = "semver"
+        const val EXTENSION_NAME = "semver"
     }
 }
