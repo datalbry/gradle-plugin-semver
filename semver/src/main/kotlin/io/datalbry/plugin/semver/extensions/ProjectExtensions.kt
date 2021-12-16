@@ -1,6 +1,6 @@
 package io.datalbry.plugin.semver.extensions
 
-import io.datalbry.plugin.semver.task.ReleaseTemplate
+import io.datalbry.plugin.semver.templates.ReleaseTemplate
 import org.gradle.api.Project
 
 inline fun <reified Type> Project.propertyOrNull(key: String): Type? {
