@@ -13,15 +13,26 @@ Setting up the plugin requires the following steps:
       id("io.datalbry.plugin.semver") version "<version>"
     }
     ```
-2. Configure the Plugin
+2. The version can now be updated using `./gradlew updateReleaseVersion`
+
+### Setup Pre Releases
+
+The Plugin supports adding multiple version schemes, 
+this might be especially useful for alpha and beta releases.
+
+1. Add the Pre Release Version in the `build.gradle.kts`
     ```kotlin
     semver {
-        propertiesFile = File("./gradle.properties")   
-        version("alpha", "alpha.{ISO_DATE_TIME}")
-        version("beta", "beta.{ISO_DATE_TIME}")
+        ...   
+        version("snapshot", "SNAPSHOT")
+        version("alpha", "alpha.{COMMIT_TIMESTAMP}")
     }
     ```
 
+2. The version can now be updated using:
+  a. `./gradlew updateSnapshotVersion` for snapshot version
+  b. `./gradlew updateAlphaVersion` for alpha version
+   
 > **NOTE:** The latest versions can be found [here](https://github.com/datalbry/gradle-semver-plugin/tags).
    
 ### Configuration
@@ -30,9 +41,18 @@ The Plugin is highly configurable. The following parameters can be set using eit
 
 |Parameter|Description|Value|Default|
 |---------|-----------|-----|-------|
-|`semanticVersion.propertiesFile`|The location of the properties file to write the version property to|`String`|`./gradle.properties`|
-|`semanticVersion.isPreRelease`|Toggles if the next version should be interpreted as a pre release|`Boolean`|`false`
-|`semanticVersion.preReleaseTemplate`|The format of the pre release suffix. `{BUILD_TIMESTAMP}` and `{COMMIT_TIMESTAMP}` are currently supported placeholder for values inside the format. The placeholder getting substituted with their corresponding actual values while evaluating the version.|`String`|`dev.{COMMIT_TIMESTAMP}`
+|`semver.propertiesFile`|The location of the properties file to write the version property to|`String`|`./gradle.properties`|
+|`semver.version`|Adds a new version, such as SNAPSHOT, Alpha or Beta to the plugin. Versions are completely configurable.|`(String, String)`||
+
+#### Version Template
+The version templates of the semver plugin MUST fulfill the SemVer standard. 
+Besides that, we support the following placeholder:
+
+| Placeholder | Substituion |
+|-------------|-------------|
+|`{COMMIT_TIMESTAMP}`|Will be substituted with the timestamp of the latest commit (epoch millis). |
+|`{BUILD_TIMESTAMP}`|Will be substituted with the current timestamp (epoch millis). |
+  
 
 ## License
 >Copyright 2021 DataLbry Technologies UG
