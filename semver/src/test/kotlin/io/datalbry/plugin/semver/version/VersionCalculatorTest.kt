@@ -34,6 +34,32 @@ class VersionCalculatorTest {
     }
 
     @Test
+    fun calculateNextVersion_withShortcutBreakingChange_raisesMajor() {
+        val commits = listOf(
+            "fix(scope_1)!: something"
+        )
+        val lastVersion = SemanticVersion(0, 1,0)
+        val nextVersion = versionCalculator.calculateNextVersion(commits, lastVersion)
+
+        assertEquals(nextVersion.major, 1)
+        assertEquals(nextVersion.minor, 0)
+        assertEquals(nextVersion.patch, 0)
+    }
+
+    @Test
+    fun calculateNextVersion_withShortcutBreakingChangeAndWithoutScope_raisesMajor() {
+        val commits = listOf(
+            "fix!: something"
+        )
+        val lastVersion = SemanticVersion(0, 1,0)
+        val nextVersion = versionCalculator.calculateNextVersion(commits, lastVersion)
+
+        assertEquals(nextVersion.major, 1)
+        assertEquals(nextVersion.minor, 0)
+        assertEquals(nextVersion.patch, 0)
+    }
+
+    @Test
     fun calculateNextVersion_withFeature_raisesMinor() {
         val commits = listOf(
             "feat(scope_1): best feature"
