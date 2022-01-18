@@ -16,6 +16,11 @@ abstract class SemanticVersionExtension @Inject constructor(project: Project) {
         )
     )
 
+    var baseline: Boolean = project.propertyOrDefault(
+        "semver.baseline",
+        true
+    )
+
     var version: String = project.propertyOrDefault(
         "semver.version",
         project.version.toString()
