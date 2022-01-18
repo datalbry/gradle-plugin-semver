@@ -74,7 +74,8 @@ class GitGraph(gitDirectory: File) {
     }
 
     private fun getTagOrNull(tags: MutableList<Ref>, it: RevCommit) = tags.firstOrNull { a ->
-        git.repository.refDatabase.peel(a).peeledObjectId?.name == it.id.name
+        val peeledObject = git.repository.refDatabase.peel(a)
+        (peeledObject.peeledObjectId ?: peeledObject.objectId.name) == it.id.name
     }
 }
 
