@@ -6,11 +6,11 @@ import io.datalbry.plugin.semver.git.GitGraph
 import io.datalbry.plugin.semver.git.SemanticGitTag
 import io.datalbry.plugin.semver.version.PreReleaseTemplateResolver
 import io.datalbry.plugin.semver.version.VersionCalculator
+import io.datalbry.plugin.semver.version.VersionReader
 import io.datalbry.plugin.semver.version.VersionWriter
 import io.datalbry.plugin.semver.version.model.SemanticVersion
 import javax.inject.Inject
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -39,6 +39,7 @@ open class VersionUpdateTask @Inject constructor(
     private val versionCalculator = VersionCalculator()
     private val preReleaseTemplateResolver = PreReleaseTemplateResolver()
     private val versionWriter = VersionWriter()
+    private val versionReader = VersionReader()
 
     init {
         group = TASK_GROUP_NAME
@@ -63,12 +64,20 @@ open class VersionUpdateTask @Inject constructor(
             val lastCommit = gitGraph.getHead()
             preReleaseTemplateResolver.resolve(template, lastCommit)
         } else null
-        val nextVersion = versionCalculator
+        val nextVersionCandidate = versionCalculator
             .calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)
             .copy(preRelease = preRelease)
 
-        logVersion(nextVersion)
 
+
+        val nextVersion = if (extension.baseline) {
+            getHigherVersion(
+                versionReader.readVersion(extension.version),
+                nextVersionCandidate
+            )
+        } else nextVersionCandidate
+
+        logVersion(nextVersion)
         val propertiesFile = extension.propertiesFile
         versionWriter.writeVersion(propertiesFile, nextVersion)
     }
@@ -94,3 +103,19 @@ open class VersionUpdateTask @Inject constructor(
         } else project.logger.info("Last version found is: ${lastVersion.version}")
     }
 }
+
+private fun getHigherVersion(first: SemanticVersion, second: SemanticVersion) = when {
+    first.isHigher(second) -> first
+    else -> second
+}
+
+
+private fun SemanticVersion.isHigher(than: SemanticVersion): Boolean {
+    return ((major > than.major) ||
+            (major == than.major && minor > than.minor) ||
+            (major == than.major && minor == than.minor && patch > than.patch) ||
+            (major == than.major && minor == than.minor
+                    && patch == than.patch && naturalCompare(preRelease, than.preRelease) <= 1))
+}
+
+private fun naturalCompare(s1: String?, s2: String?) = naturalOrder<String>().compare(s1, s2)
