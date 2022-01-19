@@ -66,16 +66,13 @@ open class VersionUpdateTask @Inject constructor(
         } else null
         val nextVersionCandidate = versionCalculator
             .calculateNextVersion(commitsSinceLastVersion, lastVersion?.version)
-            .copy(preRelease = preRelease)
-
-
 
         val nextVersion = if (extension.baseline) {
             getHigherVersion(
                 versionReader.readVersion(extension.version),
                 nextVersionCandidate
-            )
-        } else nextVersionCandidate
+            ).copy(preRelease = preRelease)
+        } else nextVersionCandidate.copy(preRelease = preRelease)
 
         logVersion(nextVersion)
         val propertiesFile = extension.propertiesFile
