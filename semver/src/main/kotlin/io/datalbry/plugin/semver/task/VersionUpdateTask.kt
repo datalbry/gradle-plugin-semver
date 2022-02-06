@@ -106,13 +106,19 @@ private fun getHigherVersion(first: SemanticVersion, second: SemanticVersion) = 
     else -> second
 }
 
-
 private fun SemanticVersion.isHigher(than: SemanticVersion): Boolean {
     return ((major > than.major) ||
             (major == than.major && minor > than.minor) ||
             (major == than.major && minor == than.minor && patch > than.patch) ||
-            (major == than.major && minor == than.minor
-                    && patch == than.patch && naturalCompare(preRelease, than.preRelease) <= 1))
+            (major == than.major && minor == than.minor && patch == than.patch
+                    && isNaturalComparedHigher(preRelease, than.preRelease)))
 }
 
-private fun naturalCompare(s1: String?, s2: String?) = naturalOrder<String>().compare(s1, s2)
+private fun isNaturalComparedHigher(s1: String?, s2: String?): Boolean {
+    return when {
+        s1 == null && s2 != null -> true
+        s1 == null && s2 == null -> false
+        s1 != null && s2 == null -> false
+        else -> naturalOrder<String>().compare(s1, s2) <= 1
+    }
+}

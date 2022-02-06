@@ -10,8 +10,8 @@ class VersionReaderTest {
 
     @Test
     fun read_validVersion_worksFine() {
-        val validVersion = "1.2.3"
-        val semanticVersion = reader.readVersion(validVersion)
+        val version = "1.2.3"
+        val semanticVersion = reader.readVersion(version)
         assertEquals(semanticVersion.major, 1)
         assertEquals(semanticVersion.minor, 2)
         assertEquals(semanticVersion.patch, 3)
@@ -37,11 +37,21 @@ class VersionReaderTest {
 
     @Test
     fun read_validVersion_withSuffix_worksFine() {
-        val versionWithSuffix = "1.2.3-SNAPSHOT"
-        val semanticVersion = reader.readVersion(versionWithSuffix)
+        val version = "1.2.3-SNAPSHOT"
+        val semanticVersion = reader.readVersion(version)
         assertEquals(semanticVersion.major, 1)
         assertEquals(semanticVersion.minor, 2)
         assertEquals(semanticVersion.patch, 3)
         assertEquals(semanticVersion.preRelease, "SNAPSHOT")
+    }
+
+    @Test
+    fun read_validVersion_withNumericalSuffix_worksFine() {
+        val version = "0.1.0-dev.1644175890"
+        val semanticVersion = reader.readVersion(version)
+        assertEquals(semanticVersion.major, 0)
+        assertEquals(semanticVersion.minor, 1)
+        assertEquals(semanticVersion.patch, 0)
+        assertEquals(semanticVersion.preRelease, "dev.1644175890")
     }
 }
