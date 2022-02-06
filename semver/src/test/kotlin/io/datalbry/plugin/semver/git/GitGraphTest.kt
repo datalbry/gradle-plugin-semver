@@ -77,4 +77,14 @@ class GitGraphTest {
         assertEquals(latestVersion.minor, 1)
         assertEquals(latestVersion.patch, 0)
     }
+
+    @Test
+    fun getLatestVersion_withOnlyPreReleases_returnsNull() = gitTest(
+        "secondCommit" to null,
+        "thirdCommit" to null,
+        "firstCommit" to SemanticVersion(0,1,0, "0.1.0-dev.1644175890")
+    ) { git ->
+        val latestVersion = git.getLatestFullVersion()
+        assertNull(latestVersion)
+    }
 }
