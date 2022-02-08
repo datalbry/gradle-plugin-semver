@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.5.30"
+kotlin = "1.6.10"
 junit = "5.7.0"
 jgit = "5.13.0.202109080827-r"
 

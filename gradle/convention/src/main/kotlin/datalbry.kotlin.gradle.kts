@@ -19,7 +19,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         languageVersion = "1.5"
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
@@ -30,8 +30,8 @@ tasks.getByName("jacocoTestReport") {
 
 // We are using Kotlin, so wdk about the Java Version onwards, as we are not relying on Java 11+ features
 tasks.withType<JavaCompile> {
-    sourceCompatibility = "1.8"
-    targetCompatibility = "1.8"
+    sourceCompatibility = "11"
+    targetCompatibility = "11"
 }
 
 // We are using jUnit5 as default

@@ -23,8 +23,8 @@ dependencies {
     testImplementation(gradleTestKit())
     testImplementation(libs.junit.jupiter.api)
 
-    testRuntime(libs.junit.jupiter.core)
-    testRuntime(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.jupiter.core)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 }
 
 gradlePlugin {
