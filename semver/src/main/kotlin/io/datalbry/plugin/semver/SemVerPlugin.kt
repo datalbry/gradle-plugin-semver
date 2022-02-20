@@ -6,9 +6,10 @@ import io.datalbry.plugin.semver.task.VersionTagTask
 import io.datalbry.plugin.semver.task.VersionUpdateTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import kotlin.reflect.KClass
 
 /**
- * The [SemanticVersionPlugin] provides a convenient way to derive Semantic Versions by
+ * The [SemVerPlugin] provides a convenient way to derive Semantic Versions by
  * the git history.
  *
  * @see io.datalbry.plugin.semver.task.VersionUpdateTask for information about the actual version update process
@@ -16,15 +17,25 @@ import org.gradle.api.Project
  * @author timo gruen - 2021-10-12
  */
 @Suppress("unused")
-class SemanticVersionPlugin: Plugin<Project> {
-
+open class SemVerPlugin: Plugin<Project> {
+    
     override fun apply(project: Project) {
-        project.extensions.create(EXTENSION_NAME, SemanticVersionExtension::class.java)
+        setupExtension(project)
+        setupTasks(project)
+    }
+
+    open fun getExtensionClass(): KClass<out SemVerExtension> = SemVerExtension::class
+
+    private fun setupExtension(project: Project) {
+        project.extensions.create(EXTENSION_NAME, getExtensionClass().java)
+    }
+
+    private fun setupTasks(project: Project) {
         project.tasks.register(TAG_TASK_NAME, VersionTagTask::class.java)
         project.tasks.register(PRINT_VERSION_TASK_NAME, PrintVersionTask::class.java)
         project.tasks.register(updateTaskName(FINAL_RELEASE), VersionUpdateTask::class.java, false, "")
         project.afterEvaluate {
-            project.extensions.getByType(SemanticVersionExtension::class.java)
+            project.extensions.getByType(getExtensionClass().java)
                 .preReleaseTemplates
                 .forEach { it.registerPreReleaseTask(project) }
         }

@@ -5,7 +5,8 @@ rootProject.name = "semver-plugin"
 includeBuild("gradle/convention")
 
 include(
-    "semver"
+    "semver",
+    "semver-github"
 )
 
 pluginManagement {

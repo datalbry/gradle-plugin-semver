@@ -1,6 +1,6 @@
 package io.datalbry.plugin.semver.task
 
-import io.datalbry.plugin.semver.SemanticVersionPlugin.Companion.TASK_GROUP_NAME
+import io.datalbry.plugin.semver.SemVerPlugin.Companion.TASK_GROUP_NAME
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 

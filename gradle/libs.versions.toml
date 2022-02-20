@@ -2,8 +2,10 @@
 kotlin = "1.6.10"
 junit = "5.7.0"
 jgit = "5.13.0.202109080827-r"
+kohsuke-github = "1.301"
 
 [libraries]
+kohsuke-github = { module = "org.kohsuke:github-api", version.ref = "kohsuke-github" }
 org-eclipse-jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
