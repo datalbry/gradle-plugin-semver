@@ -31,7 +31,7 @@ gradlePlugin {
     plugins {
         create("plugin") {
             id = "io.datalbry.plugin.semver"
-            implementationClass = "io.datalbry.plugin.semver.SemanticVersionPlugin"
+            implementationClass = "io.datalbry.plugin.semver.SemVerPlugin"
             displayName = "Gradle Semantic Version Plugin"
             description = "Simple plugin to update the gradle version property using the git history"
         }
