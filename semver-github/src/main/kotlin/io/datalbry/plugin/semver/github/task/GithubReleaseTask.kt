@@ -1,5 +1,6 @@
 package io.datalbry.plugin.semver.github.task
 
+import io.datalbry.plugin.semver.SemVerPlugin
 import io.datalbry.plugin.semver.github.GithubSemVerExtension
 import io.datalbry.plugin.semver.github.client.DefaultGithubClient
 import io.datalbry.plugin.semver.notes.ReleaseNotes
@@ -8,6 +9,10 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 class GithubReleaseTask: DefaultTask() {
+
+    init {
+        group = SemVerPlugin.TASK_GROUP_NAME
+    }
 
     private val versionReader = VersionReader()
 
