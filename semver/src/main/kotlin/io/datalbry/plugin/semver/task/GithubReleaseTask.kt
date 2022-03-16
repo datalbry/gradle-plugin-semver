@@ -1,7 +1,7 @@
-package io.datalbry.plugin.semver.github.task
+package io.datalbry.plugin.semver.task
 
+import io.datalbry.plugin.semver.SemVerExtension
 import io.datalbry.plugin.semver.SemVerPlugin
-import io.datalbry.plugin.semver.github.GithubSemVerExtension
 import io.datalbry.plugin.semver.github.client.DefaultGithubClient
 import io.datalbry.plugin.semver.notes.ReleaseNotes
 import io.datalbry.plugin.semver.version.VersionReader
@@ -18,9 +18,9 @@ class GithubReleaseTask: DefaultTask() {
 
     @TaskAction
     fun createRelease() {
-        val extension = project.extensions.getByType(GithubSemVerExtension::class.java)
+        val extension = project.extensions.getByType(SemVerExtension::class.java)
         val version = versionReader.readVersion(extension.version)
         val notes = ReleaseNotes(emptySet())
-        DefaultGithubClient(extension.repository, extension.token).createRelease(version, notes)
+        DefaultGithubClient(extension.githubRepository, extension.githubToken).createRelease(version, notes)
     }
 }

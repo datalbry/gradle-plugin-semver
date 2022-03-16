@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("datalbry.kotlin")
     id("datalbry.plugin")
@@ -19,6 +17,7 @@ dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.kotlin.stdlib)
     implementation(libs.org.eclipse.jgit)
+    implementation(libs.kohsuke.github)
 
     testImplementation(gradleTestKit())
     testImplementation(libs.junit.jupiter.api)
@@ -36,7 +35,6 @@ gradlePlugin {
             description = "Simple plugin to update the gradle version property using the git history"
         }
     }
-
 }
 
 publishing {

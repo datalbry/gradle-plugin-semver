@@ -21,5 +21,4 @@ class DefaultGithubClient(
             .body(body)
             .create()
     }
-
 }

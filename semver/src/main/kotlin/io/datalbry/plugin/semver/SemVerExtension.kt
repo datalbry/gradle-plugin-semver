@@ -20,6 +20,15 @@ abstract class SemVerExtension @Inject constructor(project: Project) {
         true
     )
 
+    var githubRepository: String = project.propertyOrDefault(
+        "semver.github.repository", ""
+    )
+
+    var githubToken: String = project.propertyOrDefault(
+        "semver.github.token",
+        ""
+    )
+
     var version: String = project.propertyOrDefault(
         "semver.version",
         project.version.toString()
