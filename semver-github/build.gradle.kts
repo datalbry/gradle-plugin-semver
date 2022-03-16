@@ -31,11 +31,11 @@ dependencies {
 gradlePlugin {
     plugins {
         create("plugin") {
-            id = "io.datalbry.plugin.semver"
-            implementationClass = "io.datalbry.plugin.semver.SemanticVersionPlugin"
-            displayName = "Gradle Semantic Version Plugin"
-            description = "Simple plugin to update the gradle version property using the git history"
-
+            id = "io.datalbry.plugin.semver.github"
+            implementationClass = "io.datalbry.plugin.semver.github.GithubSemVerPlugin"
+            displayName = "Gradle Semantic Version Plugin for GitHub"
+            description = "Simple plugin to update the gradle version property using the git history " +
+                    "and create GitHub releases"
         }
     }
 
