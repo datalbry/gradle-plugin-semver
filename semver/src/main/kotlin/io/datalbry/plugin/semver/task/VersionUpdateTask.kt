@@ -1,7 +1,7 @@
 package io.datalbry.plugin.semver.task
 
-import io.datalbry.plugin.semver.SemanticVersionExtension
-import io.datalbry.plugin.semver.SemanticVersionPlugin.Companion.TASK_GROUP_NAME
+import io.datalbry.plugin.semver.SemVerExtension
+import io.datalbry.plugin.semver.SemVerPlugin.Companion.TASK_GROUP_NAME
 import io.datalbry.plugin.semver.git.GitGraph
 import io.datalbry.plugin.semver.git.SemanticGitTag
 import io.datalbry.plugin.semver.version.PreReleaseTemplateResolver
@@ -47,7 +47,7 @@ open class VersionUpdateTask @Inject constructor(
 
     @TaskAction
     fun publish() {
-        val extension = project.extensions.getByType(SemanticVersionExtension::class.java)
+        val extension = project.extensions.getByType(SemVerExtension::class.java)
         val rootDir = project.rootDir.absoluteFile
 
         val gitGraph = GitGraph(rootDir)

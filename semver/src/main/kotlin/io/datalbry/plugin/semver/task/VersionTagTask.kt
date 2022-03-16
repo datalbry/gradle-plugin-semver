@@ -1,7 +1,7 @@
 package io.datalbry.plugin.semver.task
 
-import io.datalbry.plugin.semver.SemanticVersionExtension
-import io.datalbry.plugin.semver.SemanticVersionPlugin
+import io.datalbry.plugin.semver.SemVerExtension
+import io.datalbry.plugin.semver.SemVerPlugin
 import io.datalbry.plugin.semver.git.GitGraph
 import io.datalbry.plugin.semver.git.SemanticGitTag
 import io.datalbry.plugin.semver.notes.ReleaseNotesExtractor
@@ -21,12 +21,12 @@ open class VersionTagTask: DefaultTask() {
     private val releaseNotesExtractor = ReleaseNotesExtractor()
 
     init {
-        group = SemanticVersionPlugin.TASK_GROUP_NAME
+        group = SemVerPlugin.TASK_GROUP_NAME
     }
 
     @TaskAction
     fun publish() {
-        val extension = project.extensions.getByType(SemanticVersionExtension::class.java)
+        val extension = project.extensions.getByType(SemVerExtension::class.java)
         val rootDir = project.rootDir.absoluteFile
         val gitGraph = GitGraph(rootDir)
 

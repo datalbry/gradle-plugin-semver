@@ -1,13 +1,12 @@
 package io.datalbry.plugin.semver
 
-import io.datalbry.plugin.semver.extensions.getPreReleaseTemplates
 import io.datalbry.plugin.semver.extensions.propertyOrDefault
 import io.datalbry.plugin.semver.templates.ReleaseTemplate
-import org.gradle.api.Project
 import java.io.File
 import javax.inject.Inject
+import org.gradle.api.Project
 
-abstract class SemanticVersionExtension @Inject constructor(project: Project) {
+abstract class SemVerExtension @Inject constructor(project: Project) {
 
     var propertiesFile: File = File(
         project.propertyOrDefault(
