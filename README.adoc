@@ -22,7 +22,7 @@ plugins {
 
 === Setup Releases
 
-The Plugin supports adding multiple version schemes, 
+The Plugin supports adding multiple version schemas,
 this might be especially useful for alpha and beta releases.
 
 1. Add the Pre Release Version in the `build.gradle.kts`
