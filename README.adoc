@@ -1,0 +1,174 @@
+:toc: preamble
+
+= Gradle SemVer
+
+The `Gradle Semantic Versioning` is a sophisticated gradle plugin, helping developers to update their versions of gradle builds,
+by processing through the git history.
+
+== Getting Started
+
+Setting up the plugin requires the following steps:
+
+1. Add the Plugin to your `build.gradle.kts`
+[source,kotlin]
+----
+plugins {
+      id("io.datalbry.plugin.semver") version "<version>"
+}
+----
+
+[start=2]
+1. The version can now be updated using `./gradlew updateReleaseVersion`
+
+=== Setup Releases
+
+The Plugin supports adding multiple version schemas,
+this might be especially useful for alpha and beta releases.
+
+1. Add the Pre Release Version in the `build.gradle.kts`
+[source,kotlin]
+----
+    semver {
+        version("snapshot", "SNAPSHOT")
+        version("alpha", "alpha.{COMMIT_TIMESTAMP}")
+    }
+----
+
+[start=2]
+1. The version can now be updated using:
+  a. `./gradlew updateSnapshotVersion` for snapshot version
+  b. `./gradlew updateAlphaVersion` for alpha version
+   
+> **NOTE:** The latest versions can be found [here](https://github.com/datalbry/gradle-semver-plugin/tags).
+
+== CI/CD
+
+=== GitHub Actions
+The plugin does not support creating GitHub releases natively. The plugin utilizes git tags to create Releases
+and writes the release-notes to the git tag. Fortunately this can easily be used to create GitHub Releases using
+a simple GitHub action.
+
+==== Update / Tag Version
+
+The following GitHub action derives the latest version using the commit history and also creates a git tag containing
+the release notes as message.
+
+[source,yaml]
+----
+name: Release
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Release Version
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Number of commits to fetch. 0 indicates all history for all branches and tags.
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '15'
+
+      - name: Build and test
+        run: ./gradlew check -i
+
+      # This step will update the version in the `gradle.properties` to the latest one calculated by the commit history
+      - name: Update Version
+        run: >
+          ./gradlew updateReleaseVersion -i
+
+      # -----------------------------------------------
+      # --- You should add your specific steps here ---
+      # -----------------------------------------------
+-
+      # This will create a git tag with the latest version, including the RELEASE-NOTES in the tag message
+      - name: Tag
+        run: >
+          ./gradlew tag -i
+
+      - name: Generate Commit Message
+        run: |
+          echo "##[set-output name=message;][CI] Release version $(./gradlew -q printVersion)"
+        id: generate_commit_message
+
+      - name: Push Commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: ${{ steps.generate_commit_message.outputs.message }}
+          push_options: --follow-tags
+----
+
+==== Create GitHub Release
+Creating the following action creates a Github Release whenever a semantic Release Tag is being pushed.
+
+[source,yaml]
+----
+name: Create GitHub Release
+on:
+  push:
+    tags: [
+      'v[0-9]+.[0-9]+.[0-9]+',
+      'v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+'
+    ]
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+          with:
+            ref: ${{ github.ref }}
+
+        - name: Get Release Notes from Tag
+          run: 'echo "$(git tag -l --format="%(contents:body)" $GITHUB_REF_NAME)" > RELEASE_NOTES'
+
+        - name: Create Release
+          uses: softprops/action-gh-release@v1
+          with:
+              body_path: RELEASE_NOTES
+----
+
+== Configuration
+
+The Plugin is highly configurable. The following parameters can be set using either the extension or can be passed as parameters.
+
+|===
+| Parameter | Description | Value | Default
+
+|*`semver.propertiesFile`* |The location of the properties file to write the version property to | *`String`* | *`./gradle.properties`*
+|*`semver.version`*|Adds a new version, such as SNAPSHOT, Alpha or Beta to the plugin. Versions are completely configurable.|*`(String, String)`*|
+|*`semver.alias`*|Adds type alias for the Release Notes Formatter. E.g. (*`fix`*, *`Bugfix`*) will result into mapping *`fix`* to *`Bugfix`* as the title for any given fix commit. .|*`(String, String)`*| *(`fix`, `Bugfix`)*, *(`feat`, `Feature`)*  |
+|===
+
+==== Version Template
+The version templates of the semver plugin MUST fulfill the SemVer standard.
+Besides that, we support the following placeholder:
+
+|===
+| Placeholder | Substitution
+
+|*`{COMMIT_TIMESTAMP}`*|Will be substituted with the timestamp of the latest commit (epoch millis).
+|*`{BUILD_TIMESTAMP}`*|Will be substituted with the current timestamp (epoch millis).
+|===
+
+== License
+> Copyright 2021 DataLbry Technologies UG
+>
+> Licensed under the Apache License, Version 2.0 (the "License");
+> you may not use this file except in compliance with the License.
+> You may obtain a copy of the License at
+>
+> http://www.apache.org/licenses/LICENSE-2.0
+>
+> Unless required by applicable law or agreed to in writing, software
+> distributed under the License is distributed on an "AS IS" BASIS,
+> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+> See the License for the specific language governing permissions and
+> limitations under the License.

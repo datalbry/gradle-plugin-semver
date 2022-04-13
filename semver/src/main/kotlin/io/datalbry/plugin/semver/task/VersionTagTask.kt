@@ -2,6 +2,7 @@ package io.datalbry.plugin.semver.task
 
 import io.datalbry.plugin.semver.SemVerExtension
 import io.datalbry.plugin.semver.SemVerPlugin
+import io.datalbry.plugin.semver.extensions.getMarkdownReleaseNotesFormatterConfig
 import io.datalbry.plugin.semver.git.GitGraph
 import io.datalbry.plugin.semver.git.SemanticGitTag
 import io.datalbry.plugin.semver.notes.ReleaseNotesExtractor
@@ -28,6 +29,7 @@ open class VersionTagTask: DefaultTask() {
     fun publish() {
         val extension = project.extensions.getByType(SemVerExtension::class.java)
         val rootDir = project.rootDir.absoluteFile
+        val formatter = MarkdownReleaseNotesFormatter(extension.getMarkdownReleaseNotesFormatterConfig())
         val gitGraph = GitGraph(rootDir)
 
         val lastVersion = gitGraph.getLatestFullVersion()
@@ -37,7 +39,7 @@ open class VersionTagTask: DefaultTask() {
         logCommits(commits)
 
         val releaseNotes = releaseNotesExtractor.extractReleaseNotes(commits.map { it.shortMessage })
-        val releaseNotesString = MarkdownReleaseNotesFormatter.format(releaseNotes)
+        val releaseNotesString = formatter.format(releaseNotes)
         gitGraph.tagVersion(extension.version, releaseNotesString)
     }
 

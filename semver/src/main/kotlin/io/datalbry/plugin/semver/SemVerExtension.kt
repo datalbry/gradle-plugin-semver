@@ -20,14 +20,15 @@ abstract class SemVerExtension @Inject constructor(project: Project) {
         true
     )
 
-    var githubRepository: String = project.propertyOrDefault(
-        "semver.github.repository", ""
+    var typeAlias: MutableMap<String, String> = mutableMapOf(
+        "fix" to "Bugfix",
+        "feat" to "Feature",
+        "BREAKING CHANGE" to "Breaking Change"
     )
 
-    var githubToken: String = project.propertyOrDefault(
-        "semver.github.token",
-        ""
-    )
+    fun alias(type: String, alias: String) {
+        typeAlias[type] = alias
+    }
 
     var version: String = project.propertyOrDefault(
         "semver.version",
