@@ -20,7 +20,11 @@ abstract class SemVerExtension @Inject constructor(project: Project) {
         true
     )
 
-    var typeAlias: MutableMap<String, String> = mutableMapOf()
+    var typeAlias: MutableMap<String, String> = mutableMapOf(
+        "fix" to "Bugfix",
+        "feat" to "Feature",
+        "BREAKING CHANGE" to "Breaking Change"
+    )
 
     fun alias(type: String, alias: String) {
         typeAlias[type] = alias
