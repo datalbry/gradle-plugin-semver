@@ -1,6 +1,5 @@
 package io.datalbry.plugin.semver
 
-import io.datalbry.plugin.semver.task.GithubReleaseTask
 import io.datalbry.plugin.semver.task.PrintVersionTask
 import io.datalbry.plugin.semver.templates.ReleaseTemplate
 import io.datalbry.plugin.semver.task.VersionTagTask
@@ -34,7 +33,6 @@ open class SemVerPlugin: Plugin<Project> {
     private fun setupTasks(project: Project) {
         project.tasks.register(TAG_TASK_NAME, VersionTagTask::class.java)
         project.tasks.register(PRINT_VERSION_TASK_NAME, PrintVersionTask::class.java)
-        project.tasks.register(GITHUB_RELEASE_TASK_NAME, GithubReleaseTask::class.java)
         project.tasks.register(updateTaskName(FINAL_RELEASE), VersionUpdateTask::class.java, false, "")
         project.afterEvaluate {
             project.extensions.getByType(getExtensionClass().java)
@@ -53,7 +51,6 @@ open class SemVerPlugin: Plugin<Project> {
     companion object {
         const val FINAL_RELEASE = "release"
         const val TAG_TASK_NAME = "tag"
-        const val GITHUB_RELEASE_TASK_NAME = "createGithubRelease"
         const val PRINT_VERSION_TASK_NAME = "printVersion"
         const val TASK_GROUP_NAME = "semver"
         const val EXTENSION_NAME = "semver"
