@@ -1,9 +1,9 @@
+:toc: preamble
+
 = Gradle SemVer
 
 The `Gradle Semantic Versioning` is a sophisticated gradle plugin, helping developers to update their versions of gradle builds,
 by processing through the git history.
-
-:toc:
 
 == Getting Started
 
